@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OA Key Delivery Service Areas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bold-blue:    #194790;
+            --logo-black:   #231f20;
+            --strong-blue:  #1b75bc;
+            --strong-teal:  #00706d;
+            --strong-green: #618c3d;
+            --strong-gold:  #c1782b;
+            --accent-blue:  #3a95cd;
+            --accent-teal:  #04a39f;
+            --accent-green: #87b64a;
+            --accent-gold:  #e89831;
+            --light-gray:   #e6e7e8;
+            --accent-gray:  #bcbec0;
+            --strong-gray:  #848689;
+            --text-gray:    #51585a;
+            --white:        #ffffff;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Work Sans',sans-serif; background:var(--light-gray); color:var(--text-gray); padding:24px; }
+        .container { max-width:940px; margin:0 auto; background:transparent; padding:28px 20px; position:relative; z-index:1; }
+        .watermark-pattern { position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0; overflow:hidden; }
+        .draft-text { position:absolute; font-family:'Work Sans',sans-serif; font-size:4em; font-weight:800; color:rgba(25,71,144,0.07); transform:rotate(-45deg); white-space:nowrap; user-select:none; letter-spacing:4px; }
+        .header-section { position:relative; z-index:1; text-align:center; margin-bottom:28px; padding-bottom:22px; border-bottom:3px solid var(--accent-gray); }
+        .header-section img { width:90px; height:auto; margin:0 auto 14px; display:block; }
+        .header-section h1 { font-weight:800; font-size:1.6em; color:var(--bold-blue); line-height:1.25; margin-bottom:6px; }
+        .header-section p { color:var(--strong-gray); font-size:0.88em; font-weight:500; }
+        .legend { display:flex; justify-content:center; gap:20px; margin-top:12px; flex-wrap:wrap; }
+        .legend-item { display:flex; align-items:center; gap:7px; font-size:0.82em; font-weight:600; color:var(--text-gray); }
+        .legend-box { width:28px; height:16px; border-radius:3px; }
+        .journey-row { position:relative; z-index:1; margin-bottom:10px; }
+        .connector { display:flex; flex-direction:column; align-items:center; height:26px; margin:0 auto 10px; }
+        .connector-line { width:2px; height:10px; background:var(--accent-gray); }
+        .connector-arrow { width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-top:13px solid var(--accent-gray); animation:arrowPulse 2s ease-in-out infinite; }
+        @keyframes arrowPulse { 0%,100%{opacity:.5;transform:translateY(0)} 50%{opacity:1;transform:translateY(2px)} }
+        .phase-header { color:var(--white); padding:11px 16px; text-align:center; font-weight:700; font-size:1em; border-radius:4px 4px 0 0; text-transform:uppercase; letter-spacing:1px; }
+        .phase-header.blue  { background:var(--strong-blue); }
+        .phase-header.teal  { background:var(--strong-teal); }
+        .phase-header.green { background:var(--strong-green); }
+        .phase-header.gold  { background:var(--strong-gold); }
+        .phase-content { padding:16px; border-radius:0 0 4px 4px; border:1px solid rgba(0,0,0,0.07); border-top:none; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+        .phase-content.blue  { background:var(--accent-blue); }
+        .phase-content.teal  { background:var(--accent-teal); }
+        .phase-content.green { background:var(--accent-green); }
+        .phase-content.gold  { background:var(--accent-gold); }
+        .service-box { background:var(--white); border:2px solid var(--light-gray); border-radius:4px; padding:14px 12px 16px; cursor:pointer; transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease; position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; min-height:132px; }
+        .service-box:hover { transform:translateY(-4px); box-shadow:0 8px 22px rgba(25,71,144,0.16); border-color:var(--strong-blue); }
+        .service-number { position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--bold-blue); color:var(--white); width:29px; height:29px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.82em; font-weight:700; border:3px solid var(--white); box-shadow:0 2px 6px rgba(25,71,144,0.3); }
+        .service-icon { font-size:1.9em; margin-top:13px; margin-bottom:6px; }
+        .service-name { font-size:0.85em; color:var(--text-gray); line-height:1.3; font-weight:600; flex:1; display:flex; align-items:center; justify-content:center; }
+        .service-labels { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; justify-content:center; }
+        .label { font-size:0.6em; padding:2px 7px; border-radius:3px; font-weight:700; letter-spacing:.3px; }
+        .label.g { background:#FFD700; color:var(--logo-black); }
+        .label.p { background:var(--strong-gray); color:var(--white); }
+        .sub-items { font-size:.68em; color:var(--strong-gray); margin-top:5px; line-height:1.4; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(25,71,144,0.55); z-index:1000; animation:fadeIn .25s ease; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .modal-content { position:relative; background:var(--white); max-width:780px; width:calc(100% - 48px); margin:40px auto; border-radius:4px; box-shadow:0 20px 60px rgba(25,71,144,0.25); animation:slideDown .25s ease; overflow:hidden; }
+        @keyframes slideDown { from{transform:translateY(-40px);opacity:0} to{transform:translateY(0);opacity:1} }
+        .modal-header { background:var(--strong-blue); padding:16px 22px 14px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+        .modal-header h2 { color:var(--white); font-weight:700; font-size:1.02em; line-height:1.3; flex:1; }
+        .close { color:var(--white); font-size:26px; padding:0 4px; min-width:32px; min-height:32px; cursor:pointer; opacity:.8; transition:opacity .2s; line-height:1; flex-shrink:0; background:none; border:none; font-family:inherit; }
+        .close:hover { opacity:1; }
+        .modal-body { padding:18px 22px 22px; }
+        .modal-body p { color:var(--text-gray); line-height:1.65; font-size:.91em; }
+        .why-important-box { background:#fff8ee; border-left:4px solid var(--strong-gold); border-radius:0 4px 4px 0; padding:11px 14px; margin-bottom:14px; }
+        .why-label { font-weight:700; color:var(--strong-gold); font-size:.73em; text-transform:uppercase; letter-spacing:.8px; margin-bottom:5px; }
+        .why-important-box p { color:var(--text-gray); font-size:.9em; line-height:1.6; margin:0; }
+        .oa-levels-box { background:var(--light-gray); border-radius:4px; padding:11px 14px; margin:11px 0; }
+        .oa-levels-box p { margin:5px 0; font-size:.9em; }
+        .spectrum { width:100%; border-collapse:separate; border-spacing:0 3px; margin:12px 0 6px; font-size:.8em; }
+        .spectrum th { text-align:left; background:var(--bold-blue); color:var(--white); font-weight:700; padding:7px 10px; font-size:.95em; letter-spacing:.5px; border-radius:3px; }
+        .spectrum td { padding:8px 10px; vertical-align:top; line-height:1.5; }
+        .spectrum td.stage { width:118px; font-weight:700; white-space:nowrap; border-radius:3px 0 0 3px; }
+        .spectrum td.desc { border-radius:0 3px 3px 0; }
+        .spectrum tr.s-a td { background:#e9ecf1; }
+        .spectrum tr.s-b td { background:#dbe4ee; }
+        .spectrum tr.s-c td { background:#c9dced; }
+        .spectrum tr.s-c td.stage { color:#1b4f7d; }
+        .spectrum tr.s-gold td { background:#f7e3a8; }
+        .spectrum tr.s-gold td.stage { color:#7a5c08; }
+        .spectrum tr.s-plat td { background:#d9dde1; }
+        .spectrum tr.s-plat td.stage { color:#4a5158; }
+        .popup-scroll { max-height:70vh; overflow-y:auto; padding-right:4px; }
+        .popup-scroll hr { border:none; border-top:1px solid var(--light-gray); margin:10px 0; }
+        .modal-body b { color:var(--strong-blue); }
+        @media (max-width:760px) { .phase-content { grid-template-columns:repeat(2,1fr); } }
+        @media (max-width:600px) {
+            body { padding:12px; }
+            .container { padding:16px 14px; }
+            .header-section img { width:70px; }
+            .header-section h1 { font-size:1.2em; }
+            .header-section p { font-size:.82em; }
+            .phase-content { grid-template-columns:repeat(2,1fr); padding:12px; gap:10px; }
+            .service-box { min-height:120px; padding:10px 6px 12px; }
+            .service-name { font-size:.74em; }
+            .service-icon { font-size:1.4em; }
+            .draft-text { font-size:2.6em; }
+            .modal-content { width:100%; max-width:none; margin:0; min-height:100%; border-radius:0; }
+            .modal-header { padding:14px 16px 12px; position:sticky; top:0; z-index:2; }
+            .modal-body { padding:14px 16px 24px; }
+            .popup-scroll { max-height:none; -webkit-overflow-scrolling:touch; }
+            .spectrum { font-size:.86em; }
+            .spectrum td.stage { width:auto; display:block; white-space:normal; padding-bottom:2px; border-radius:3px 3px 0 0; }
+            .spectrum td.desc { display:block; padding-top:0; border-radius:0 0 3px 3px; }
+            .spectrum th { display:block; }
+            .spectrum tr { display:block; margin-bottom:6px; }
+        }
+        @media (max-width:430px) { .phase-content { grid-template-columns:1fr; } }
+    </style>
+</head>
+<body>
+<div class="watermark-pattern" id="watermark"></div>
+<div class="container">
+    <div class="header-section">
+        <img src="https://www.goodwill.org/wp-content/uploads/2025/12/logo.svg" alt="Goodwill Logo">
+        <h1>Goodwill Opportunity Accelerator&reg;<br>Key Service Delivery Areas</h1>
+        <p><em>Click on any service area for details, including why it matters and how it progresses from Prospective to Platinum.</em></p>
+        
+        </div>
+    </div>
+
+    <div class="journey-row">
+        <div class="phase-header blue">Organizational Prep</div>
+        <div class="phase-content blue">
+            <div class="service-box" data-id="1"><div class="service-number">1</div><div class="service-icon">&#128101;</div><div class="service-name">Functionally Aligned Staffing Model</div></div>
+            <div class="service-box" data-id="2"><div class="service-number">2</div><div class="service-icon">&#127891;</div><div class="service-name">Goodwill&reg; Career Coach &amp; Navigator Certificate</div></div>
+            <div class="service-box" data-id="3"><div class="service-number">3</div><div class="service-icon">&#11088;</div><div class="service-name">OA Fellows Program</div></div>
+            <div class="service-box" data-id="4"><div class="service-number">4</div><div class="service-icon">&#128279;</div><div class="service-name">Referral &amp; Wraparound Network Integration</div></div>
+            <div class="service-box" data-id="5"><div class="service-number">5</div><div class="service-icon">&#129309;</div><div class="service-name">Employer Partnership Planning &amp; Outreach</div></div>
+            <div class="service-box" data-id="6"><div class="service-number">6</div><div class="service-icon">&#128202;</div><div class="service-name">Evaluating Impact &amp; Metrics</div></div>
+        </div>
+    </div>
+
+    <div class="connector"><div class="connector-line"></div><div class="connector-arrow"></div></div>
+
+    <div class="journey-row">
+        <div class="phase-header teal">Assess &amp; Plan</div>
+        <div class="phase-content teal">
+            <div class="service-box" data-id="7"><div class="service-number">7</div><div class="service-icon">&#128226;</div><div class="service-name">Outreach / Recruitment</div></div>
+            <div class="service-box" data-id="8"><div class="service-number">8</div><div class="service-icon">&#128221;</div><div class="service-name">Registration / Intake</div></div>
+            <div class="service-box" data-id="9"><div class="service-number">9</div><div class="service-icon">&#9989;</div><div class="service-name">Assessment Selection</div><div class="sub-items">9A: Needs &nbsp;|&nbsp; 9B: Basic Education<br>9C: Career Readiness &nbsp;|&nbsp; 9D: Digital Skills</div></div>
+            <div class="service-box" data-id="10"><div class="service-number">10</div><div class="service-icon">&#8505;&#65039;</div><div class="service-name">Orientation</div></div>
+            <div class="service-box" data-id="11"><div class="service-number">11</div><div class="service-icon">&#128203;</div><div class="service-name">Individual Career &amp; Financial Plan (ICFP)</div></div>
+        </div>
+    </div>
+
+    <div class="connector"><div class="connector-line"></div><div class="connector-arrow"></div></div>
+
+    <div class="journey-row">
+        <div class="phase-header green">Equip &amp; Connect</div>
+        <div class="phase-content green">
+            <div class="service-box" data-id="12"><div class="service-number">12</div><div class="service-icon">&#128652;</div><div class="service-name">Wraparound Supports</div></div>
+            <div class="service-box" data-id="13"><div class="service-number">13</div><div class="service-icon">&#128178;</div><div class="service-name">Financial Education</div></div>
+            <div class="service-box" data-id="14"><div class="service-number">14</div><div class="service-icon">&#128218;</div><div class="service-name">Foundational Skills Training</div></div>
+            <div class="service-box" data-id="15"><div class="service-number">15</div><div class="service-icon">&#128187;</div><div class="service-name">Digital Skills Training</div></div>
+            <div class="service-box" data-id="16"><div class="service-number">16</div><div class="service-icon">&#128295;</div><div class="service-name">Occupation-Specific Training</div></div>
+            <div class="service-box" data-id="17"><div class="service-number">17</div><div class="service-icon">&#128269;</div><div class="service-name">Career Exploration Opportunities</div></div>
+            <div class="service-box" data-id="18"><div class="service-number">18</div><div class="service-icon">&#128105;&#8205;&#128188;</div><div class="service-name">Job Search / Prep Assistance</div></div>
+        </div>
+    </div>
+
+    <div class="connector"><div class="connector-line"></div><div class="connector-arrow"></div></div>
+
+    <div class="journey-row">
+        <div class="phase-header gold">Launch &amp; Evaluate</div>
+        <div class="phase-content gold">
+            <div class="service-box" data-id="19"><div class="service-number">19</div><div class="service-icon">&#128188;</div><div class="service-name">Job Placement Assistance</div></div>
+            <div class="service-box" data-id="20"><div class="service-number">20</div><div class="service-icon">&#128200;</div><div class="service-name">Retention Services &amp; Follow-Up</div></div>
+            <div class="service-box" data-id="21"><div class="service-number">21</div><div class="service-icon">&#127942;</div><div class="service-name">Alumni Engagement</div></div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modal-title"></h2>
+            <button class="close" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="modal-description"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const el=document.getElementById('watermark');
+    function build(){
+        el.innerHTML='';
+        const h=window.innerHeight, w=window.innerWidth;
+        const stepY=window.innerWidth<600?130:180;
+        const stepX=window.innerWidth<600?200:280;
+        for(let r=0;r<Math.ceil(h/stepY)+2;r++){
+            for(let c=0;c<Math.ceil(w/stepX)+2;c++){
+                const d=document.createElement('div');
+                d.className='draft-text';d.textContent='DRAFT';
+                d.style.top=(r*stepY-80)+'px';d.style.left=(c*stepX-80)+'px';
+                el.appendChild(d);
+            }
+        }
+    }
+    build();
+    let t;
+    window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,150);});
+})();
+
+function why(text){
+    return `<div class="why-important-box"><div class="why-label">&#11088; Why is this important?</div><p>${text}</p></div>`;
+}
+function lvls(gold,plat){
+    return `<div class="oa-levels-box"><p><span class="label g">G</span>&nbsp;&rarr;&nbsp;<b>OA Gold:</b> ${gold}</p><br><p><span class="label p">P</span>&nbsp;&rarr;&nbsp;<b>OA Platinum:</b> ${plat}</p></div>`;
+}
+function spectrum(a,b,c,g,p){
+    return `<table class="spectrum">
+<tr><th colspan="2">Progression: Prospective to Platinum</th></tr>
+<tr class="s-a"><td class="stage">A&nbsp;&middot;&nbsp;Prospective</td><td class="desc">${a}</td></tr>
+<tr class="s-b"><td class="stage">B&nbsp;&middot;&nbsp;Exploring</td><td class="desc">${b}</td></tr>
+<tr class="s-c"><td class="stage">C&nbsp;&middot;&nbsp;Progressing</td><td class="desc">${c}</td></tr>
+<tr class="s-gold"><td class="stage">D&nbsp;&#9733;&nbsp;Gold</td><td class="desc">${g}</td></tr>
+<tr class="s-plat"><td class="stage">E&nbsp;&#9733;&#9733;&nbsp;Platinum</td><td class="desc">${p}</td></tr>
+</table>`;
+}
+function row(label,val){
+    return `<p style="margin:6px 0;font-size:.9em;"><b>${label}</b> ${val}</p>`;
+}
+
+const defs = {
+    1:{title:"1. Functionally Aligned Staffing Model",html:`<div class="popup-scroll">
+${why("Organizations that clearly define who is responsible for what tend to deliver services more consistently and adapt more quickly when challenges arise. When core functions have named owners, staff can develop genuine expertise in their area rather than spreading attention across too many responsibilities. This isn't about rigid hierarchy; many strong organizations cover these functions creatively across small teams. It's about intentionality. Knowing who owns each function makes it easier to improve, troubleshoot, and grow.")}
+${row("Definition:","Staff are organized by the work they do, rather than by program or funding source. Each core OA function has a clear owner, so participants get the same quality of service no matter which door they come through.")}
+${spectrum("Staff organized by program, grant, or population; each new grant hires its own team doing every function.","Leaders recognize the silo problem. Some shared steps exist, but staffing is still largely program-by-program.","Functional groups forming. A shared point of entry exists; some staff serve across funding streams; roles being defined.","Staff organized into functional groups. One common point of entry. Participants served by function regardless of funding stream; blended funding documented.","Full functional model at fidelity. Specialization within a function only where volume warrants. Skills-based hiring and change management drive improvement.")}  
+${row("Optional:","Community Engagement Team Member(s) — engages community partners to support OA resource needs.")}
+
+</div>`},
+    2:{title:"2. Goodwill&reg; Career Coach and Navigator Certificate",html:`<div class="popup-scroll">
+${why("Career navigation is a skilled practice, and the Certificate gives practitioners a shared professional foundation. Participants bring complex and layered needs to their navigators — and having a common framework for coaching, barrier identification, and goal-setting means the quality of that support doesn't vary based on individual intuition alone. Certified navigators report greater confidence in their work, and organizations benefit from having a common language and methodology across their team. It's an investment in staff that tends to pay back through stronger participant relationships and better outcomes.")}
+${row("Definition:","Goodwill&reg; Career Navigator and Coach Professional Certificate for team members providing coaching and career navigation services. The certificate trains navigators on one shared set of skills, so every participant gets the same intensive, collaborative support to identify and address employment barriers.")}
+${spectrum("No shared coaching or navigation training.","Leaders see the value of certification. Some ad hoc training, but no expectation, plan, or budget to certify navigators.","Certification expected for the navigator role. Some navigators enrolled or partially complete; a tracking method forming.","Career Navigators certified through the Goodwill Career Navigator and Coach Certificate. Core coaching competencies applied in practice; completion tracked.","Full certification sustained, with the Digital Navigator specialization where relevant. Ongoing professional development and peer coaching.")}  
+${row("Optional:","Any mission team member — not just those in coaching roles — may complete the training.")}
+</div>`},
+    3:{title:"3. OA Fellows Program",html:`<div class="popup-scroll">
+${why("The OA Fellows program develops internal leaders who can drive adoption from the inside. OA Fellows bring back deep knowledge of the framework and use it to support their colleagues, model strong practice, and keep implementation grounded as the organization grows and evolves. Requiring two OA Fellows at Platinum reflects the value of having more than one person in that role — not just for coverage, but because practitioners who can think through the work together tend to implement it more thoughtfully than those working in isolation.")}
+${row("Definition:","Leadership development through participation in the OA Fellows program. OA Fellows are internal champions for OA, trained to understand the framework and equip Goodwill peers to put it into practice locally.")}
+${spectrum("No internal OA champion.","Leaders see the value of a champion, but no one is formally developed or resourced to lead adoption internally.","A team member is enrolled in or partway through the Fellows program. The champion role is forming.","At least one team member active in or completed the Fellows program. The Fellow models practice and helps translate OA into local action.","Two or more Fellows sustain a local community of practice, mentor staff, drive fidelity, and are resourced with time and authority.")}  
+${row("Optional:","No limit on the number of OA Fellows per organization.")}
+</div>`},
+    4:{title:"4. Referral &amp; Wraparound Network Integration",html:`<div class="popup-scroll">
+${why("Research consistently shows that employment outcomes improve when workforce services are integrated with support for the broader circumstances of participants' lives. Transportation, housing stability, childcare access, and health — these factors shape whether someone can show up, engage fully, and sustain employment. Organizations that build strong referral networks don't have to solve every problem directly; they just have to know who does, and have a reliable way to connect people to them. ART platforms at the Platinum level add a layer of accountability — closed-loop referrals let you see what's actually happening after you make that connection, not just that you made it.")}
+${row("Definition:","Building partnerships based on what people in the region actually need, and using referral technology to connect individuals to support services and confirm they received the help.")}
+${spectrum("Referrals are ad hoc, a phone number or a photocopied list. No formal partnerships; no follow-through.","A resource list and a few informal partners exist, but referrals are not documented, tracked, or grounded in needs data.","Some formal partnerships being documented. Follow-through tracked manually.","Formal, documented partnerships across core need areas. Referrals and outcomes tracked.","Partnerships grounded in regional needs data, integrated with intake and the ICFP, reviewed on a continuous-improvement cycle.")}  
+${row("Optional:","Choice of ART platform (<a href='https://www.findhelp.org/' target='_blank' rel='noopener noreferrer'>Findhelp</a>, <a href='https://uniteus.com/industries/community/' target='_blank' rel='noopener noreferrer'>Unite Us</a>, or <a href='https://wellsky.com/human-services-software/' target='_blank' rel='noopener noreferrer'>WellSky</a>), data source, and types of partner organizations (must align with regional needs).")}
+</div>`},
+    5:{title:"5. Employer Partnership Planning &amp; Outreach",html:`<div class="popup-scroll">
+${why("Strong employer relationships benefit everyone in the system. Participants get access to real job opportunities with employers who are expecting them. Employers get a reliable talent pipeline of candidates who've been prepared with their actual needs in mind. And the organization gains market intelligence — direct feedback on what skills are valued, which credentials carry weight, and where the opportunities are growing. Labor market data grounds these partnerships in evidence rather than assumptions, helping organizations allocate their training investments toward occupations with genuine regional demand.")}
+${row("Definition:","Engaging employers using labor market data to co-create training and job placement strategies, focused on industries that are hiring and bringing employers together as a group rather than one at a time.")}
+${spectrum("Employer contact is informal or none; transactional job orders. No labor market data behind training choices.","A few ad hoc employer relationships. Training decisions not yet grounded in demand; employers treated as job leads.","Referral partnerships forming and being documented. Beginning to use LMI and move from job orders toward relationships.","Formal referral partnerships with local employers offering real jobs. A dedicated Business Engagement function stewards relationships.","Strategic, data-informed partnerships: specific LMI targets training to in-demand occupations, and employers co-create training.")}  
+${row("Optional:","Choice of employer partners and LMI source.")}
+</div>`},
+    6:{title:"6. Evaluating Impact and Metrics",html:`<div class="popup-scroll">
+${why("Organizations that track outcomes over time are better positioned to improve their programs, communicate their value to funders, and make the case to employers that their participants are prepared. Post-placement follow-up in particular tends to surface insights that aren't visible at the point of job placement: which participants are thriving and why, where gaps in preparation showed up, and which employer relationships are producing stable long-term outcomes. The data requirements here are also part of a network-level learning system — GII uses what member organizations submit to identify what's working across the field.")}
+${row("Definition:","Collecting and analyzing the same data on every participant to measure KPIs and gather feedback throughout the journey, and using what the data shows to improve services rather than only to report.")}
+${spectrum("No consistent data tracking. Data captured informally, if at all; cannot support reporting or improvement.","Some data collected but intervals and fields inconsistent. Reporting is point-in-time, mostly for compliance.","A case management system is in use; most short-list data fields captured. Post-placement follow-up beginning.","Short list of individual-level data in a CMS. Post-placement data at 30, 60, 90, and 180 days; data submitted to GII monthly.","Long list of data fields; follow-up extended to 365 days. Longitudinal data feeds a continuous-improvement cycle with benchmarking.")}  
+${row("Optional:","Choice of CaseWorthy or other case management system. Forms can be paper or digital. Additional KPIs may be collected.")}
+</div>`},
+    7:{title:"7. Outreach / Recruitment",html:`<div class="popup-scroll">
+${why("Intentional outreach expands access to the populations that stand to benefit most from OA services — people who may not know the program exists, who have had mixed experiences with institutions in the past, or who are more likely to engage through a trusted community partner than through a direct search. ART platforms support this by creating structured referral pathways with organizations already serving these populations. The goal isn't to replace organic enrollment but to complement it — ensuring that the program reaches people across a fuller spectrum of need and circumstance, not just those who were already looking.")}
+${row("Definition:","Promote mission services using diverse outreach methods and referral technologies. Outreach is planned around the participant's life and delivered with community organizations people already trust, so it reaches those least likely to come in on their own.")}
+${spectrum("Outreach is passive; the program serves only those who already know about it. No intentional strategy.","Some outreach through a single channel. Messaging is generic, not tailored to those facing the greatest barriers.","A recruitment strategy is forming: a few community partners and channels used; the team tracks which bring people in.","An intentional, multi-channel strategy reaches priority populations with tailored, asset-based messaging. (Encouraged, not required.)","Systematic outreach through established referral partners and referral technology. Outreach and enrollment demographics tracked.")}  
+${row("Optional:","Choice of outreach methods and ART platforms (<a href='https://www.findhelp.org/' target='_blank' rel='noopener noreferrer'>Findhelp</a>, <a href='https://uniteus.com/industries/community/' target='_blank' rel='noopener noreferrer'>Unite Us</a>, or <a href='https://wellsky.com/human-services-software/' target='_blank' rel='noopener noreferrer'>WellSky</a>).")}
+</div>`},
+    8:{title:"8. Registration / Intake",html:`<div class="popup-scroll">
+${why("Good intake sets up everything that follows. When teams collect consistent, structured information at enrollment, aligned with the OA data fields, they gain the ability to understand who they're serving, match people to appropriate services, and track progress meaningfully over time. It's also often the first formal interaction a participant has with the program, which means the quality of the conversation matters as much as the data it produces. Intake done well builds trust and signals to participants that the organization is genuinely interested in understanding them, not just processing them.")}
+${row("Definition:","Conduct intake services to meet with potential clients/job seekers, learn more about who they are, and collect demographic, work and educational history, and other personal information that determines eligibility. Intake follows the same steps for everyone and is a welcoming, trauma-informed conversation rather than a form.")}
+${spectrum("No standardized intake.","A basic intake form exists but fields vary by staff and are not aligned to OA KPIs. Intake is paperwork, not relationship.","A standard intake form captures most short-list KPIs. Data entered into the CMS, with some delays.","Intake aligned to the OA short KPI list; every participant completes a consistent, welcoming, trauma-informed intake that flows into the ICFP.","Intake aligned to the long KPI list; comprehensive baseline integrates with the ICFP and reporting.")}  
+${row("Optional:","Choice of intake form (paper or digital); additional data may be collected.")}
+</div>`},
+    9:{title:"9. Assessment Selection",html:`<div class="popup-scroll">
+${why("Starting from an honest picture of where someone is — rather than where we assume they are — allows for smarter sequencing of services. Assessments reduce the guesswork that can lead to placing participants in training they're not yet ready for, or skipping foundational supports that would make everything else more effective. Each of the four assessment types contributes something distinct: the Needs Assessment ensures the program responds to the whole person; the Basic Education Assessment helps navigate the right starting point for participants heading into occupational training; the Career Readiness and Interest Assessment helps make the career match more intentional; and the Digital Skills Assessment allows training to be targeted at real gaps rather than assumed ones.")}
+${row("Definition:","Career coach or navigator selects assessments based on individual needs. Assessments look at the whole person rather than one test score, use valid tools given by trained staff, and the results are used to build the participant's plan.")}
+${spectrum("Assessment is informal or skipped.","Some assessments are used, but tools vary by staff and their validity is unverified. A single test may stand in for the whole picture. Accommodations are handled case by case, and results are applied inconsistently.","The organization is standardizing valid, reliable tools across the assessment domains and starting to combine more than one source rather than a single score. Accommodations and language access are being built in, and results are beginning to feed the participant&#39;s plan.","A whole-person assessment across the four domains (needs, basic education, career readiness and interest, digital skills) using valid, reliable tools administered by qualified staff. Fairness, accommodations, and language access are standard, and results feed each participant&#39;s Individual Career and Financial Plan.","Everything at Gold. Adverse-impact and validity are reviewed on an ongoing basis, participants are re-assessed to track progress, and results consistently drive individualized pathways and re-planning.")}  
+${row("Optional:","Additional assessments may be used; meetings can be virtual or in-person.")}
+<br><p><b>9a. Needs Assessment</b></p><hr>
+${why("Understanding what someone is managing outside the building is essential to offering relevant wrap-around support. This isn't about identifying barriers — it's about seeing the whole person and ensuring the program responds to their actual situation, with services that are targeted rather than assumed.")}
+${row("Definition:","Holistic evaluation across: financial capability, health care, food security, housing stability, transportation, legal issues, family care (adult and child), and clothing needed for employment. Results are used to match supports to what each person actually needs.")}
+${row("Optional:","Choice of assessment tool.")}
+<br><p><b>9b. Basic Education Assessment</b></p><hr>
+${why("For participants without a diploma heading into occupational training, knowing their foundational literacy and numeracy levels helps identify the right starting point. It supports smarter sequencing of services and sets people up to succeed rather than struggle in training that moves too fast.")}
+${row("Definition:","Assess reading, writing, math, and English language proficiency levels so training starts at the right level for the person.")}
+${row("Optional:","Any valid and reliable assessment; may be provided directly or via referral.")}
+<br><p><b>9c. Career Readiness / Interest Assessment</b></p><hr>
+${why("Interest and fit matter for long-term retention. Participants who are connected to careers that align with their strengths and interests tend to be more motivated and more likely to advance. This assessment helps make that match more intentional rather than leaving it to chance.")}
+${row("Definition:","Evaluate interests and job skills to identify suitable career paths, so the career match is intentional rather than left to chance.")}
+${row("Optional:","JOFI or other assessments may be used.")}
+<br><p><b>9d. Digital Skills Assessment</b></p><hr>
+${why("Knowing where someone's digital skills actually are — rather than assuming — allows training to be targeted at real gaps. Northstar assessments provide a structured, consistent way to assess this, which also means progress can be measured and celebrated over time.")}
+${row("Definition:","Evaluate comfort and gaps in basic digital skills, so training targets real gaps and progress can be measured over time.")}
+${row("Optional:","Other assessments may be used.")}
+</div>`},
+    10:{title:"10. Orientation",html:`<div class="popup-scroll">
+${why("Participants who start a program understanding what it is, what's expected of them, and what support is available tend to engage more fully and persist more consistently. Orientation reduces early attrition by replacing uncertainty with clarity. It's also an early opportunity to set a tone of welcome, partnership, and mutual investment — signaling from day one that the program is designed around their success.")}
+${row("Definition:","Provide welcome materials and sessions explaining available services. Orientation shows participants the full path ahead, what to expect, and what support is there, so they start with confidence.")}
+${spectrum("No orientation.","An informal welcome happens for some participants, but it is inconsistent, undocumented, and not required before enrollment. What someone learns depends on who greets them.","A standard orientation exists and most participants complete it, though not yet universally or before enrollment. It covers services, but does not yet give participants a full picture of the pathway ahead.","All individuals complete a consistent orientation prior to enrollment. It explains available services, how the OA journey works, and mutual expectations, and leaves participants with a clear picture of the path ahead and confidence that it is achievable. Delivered group or individual, virtual or in-person.","Orientation is treated as a persistence strategy and refined over time. Every participant leaves understanding the full pathway and what success looks like, with a warm bridge into the ICFP, and participant feedback on the orientation experience is collected and used to strengthen it.")}  
+${row("Optional:","Format can be group or individual, virtual or in-person.")}
+</div>`},
+    11:{title:"11. Individual Career and Financial Plan (ICFP)",html:`<div class="popup-scroll">
+${why("Goal-setting research supports what experienced practitioners already know: people who articulate their own goals and see a clear path forward are more motivated and more likely to follow through. The ICFP makes that process formal and documented. It creates a shared reference point between the participant and their navigator — a living record of where someone is headed and what commitments have been made on both sides. It also ties financial goals explicitly to career goals, acknowledging that employment is a means to economic stability, not an end in itself.")}
+${row("Definition:","A personalized plan, built together with the participant, with SMART goals the participant sets for their career pathway, financial stability, and other self-sufficiency goals.")}
+${spectrum("No individual plan.","Some participants have goal notes or a partial plan, but plans are inconsistent, written by staff rather than developed with the participant, and rarely revisited after the first meeting.","A standard ICFP is being adopted and most participants have a written plan developed with them. Goals are becoming more specific, though career and financial goals are not yet fully integrated and plans are not consistently used to guide services.","Every participant develops a written ICFP collaboratively with their Career Navigator, using SMART goals across both career pathway and financial stability. The plan identifies goals, barriers, and the combination of services that will achieve them, and services connect back to the plan.","The ICFP is a living strategy, reviewed and updated as participants progress, hit obstacles, or reach goals. Progress is tracked and shared with the participant so they can see movement, financial capability support is actively delivered alongside career services, and the plan drives every service decision.")}  
+${row("Optional:","Organizations may use the standard ICFP template or any other paper or digital form that meets the required criteria.")}
+</div>`},
+    12:{title:"12. Wraparound Supports",html:`<div class="popup-scroll">
+${why("Research across workforce development programs consistently shows that addressing barriers outside the classroom improves outcomes inside it. Access to transportation, stable housing, health services, and childcare correlates with stronger completion rates and longer job tenure. Wrap-around supports don't need to be delivered by the organization directly — a strong partner network serves the same function. What matters is that the connection is real and that participants know how to access it. When those supports are in place, people can bring more of themselves to the work of building a career.")}
+${row("Definition:","Provide support services matched to each person's assessed needs, including remedial education, financial capability, health care, mental health, food security, housing stability, transportation, legal issues, family care (adult and child), and clothing needed for employment. Staff introduce participants to partners directly rather than handing out a list.")}
+${spectrum("Barriers go unaddressed.","Some supports offered reactively and inconsistently, not tied to assessed needs, often only when a participant asks.","A defined menu of supports exists and is offered to many participants, though not consistently matched to assessed barriers.","Wraparound supports offered aligned to each participant&#39;s assessed needs, delivered directly or through partners, connected to ICFP barriers. Utilization tracked.","Proactive, individualized support: barriers anticipated, emergency assistance prevents disruption, and a whole-person, two-generation lens is applied.")}  
+${row("Optional:","Services may be provided directly or via partners; additional supports like dental care or financial incentives may be included.")}
+</div>`},
+    13:{title:"13. Financial Education",html:`<div class="popup-scroll">
+${why("Employment is the beginning of economic stability, not the arrival. Financial education helps participants build the knowledge to make the most of earned income — managing expenses, understanding how benefits interact with wages, beginning to build savings, and navigating debt. Programs that integrate financial capability into their workforce services tend to see stronger retention outcomes, partly because participants are better equipped to weather the financial transitions that come with starting a new job.")}
+${row("Definition:","Guidance on managing and planning personal finances, offered at the level each person needs and focused on applied skills such as building a budget, opening an account, or starting savings.")}
+${spectrum("No financial education offered.","Occasional financial tips shared informally, but no consistent offer, curriculum, or way to match support to need.","A financial education offering exists and reaches many participants, though not consistently offered or matched to need.","Financial education offered to every participant, with the level matched to individual need (single topic to full coaching). Delivered directly or through partners.","Financial education integrated with the ICFP and sequenced to anticipated income, using goal-based coaching and links to banking, savings, and credit-building.")}  
+${row("Optional:","Delivery method and curriculum. Provided directly or through partners.")}
+</div>`},
+    14:{title:"14. Foundational Skills Training",html:`<div class="popup-scroll">
+${why("Employers across industries consistently identify professional skills — reliability, communication, teamwork, problem-solving — as among the top factors in new hire success and retention. Occupational credentials open doors, but professional skills determine what happens after someone walks through them. The Skills to Succeed Academy curriculum, required at Platinum, provides a structured, evidence-informed approach to building these competencies. Organizations that integrate foundational skills training tend to see better employment retention and stronger employer relationships over time.")}
+${row("Definition:","Training on the personal and interpersonal skills employers ask for most, such as reliability, communication, teamwork, and problem solving, taught through practice and real workplace scenarios.")}
+${spectrum("Foundational skills are not taught.","Soft-skill topics come up informally during other services, but there is no dedicated, consistent offering.","A foundational skills offering is taking shape and reaches many participants, though not aligned to employer feedback.","Foundational skills training offered to every participant, covering the core competencies. Completion tracked.","Training includes a structured, interactive, scenario-based course, is aligned to employer feedback, and connects to occupation-specific training and placement.")}  
+${row("Optional:","Delivery method; aligned with employer feedback. Provided directly or through partners.")}
+</div>`},
+    15:{title:"15. Digital Skills Training",html:`<div class="popup-scroll">
+${why("Digital competency has become foundational across virtually every employment sector, and the range of what that means varies considerably by industry and role. The Goodwill Digital Career Accelerator framework was designed to make digital skills training relevant and contextual — building competencies that connect directly to the career pathways participants are pursuing, rather than generic technology literacy that may not transfer. When digital training is tailored to both participant needs and employer expectations, it tends to produce more confident job seekers and more prepared employees.")}
+${row("Definition:","Teach use of computers, software, and online tools for employment, starting with basic skills and moving up through clear levels toward what the job requires.")}
+${spectrum("No digital skills training.","Staff help with a device or an online form when someone asks, but there is no curriculum, no skill levels, and no way to know what a person learned.","A digital skills offering is taking shape and follows parts of the GDCA framework. Levels are being defined, though training is not yet matched to assessed gaps.","Digital skills training follows the GDCA framework, starts at the participant&#39;s assessed level, and is tailored to both employer skill demand and individual need.","A full leveled pathway from basic computer use through occupation-specific digital skills, with progress measured by Northstar and training leading to credentials employers recognize.")}  
+${row("Optional:","Delivery method (in-person, virtual), curriculum, and training type. Provided directly or through partners.")}
+</div>`},
+    16:{title:"16. Occupation-Specific Training",html:`<div class="popup-scroll">
+${why("Industry-recognized credentials signal validated competency to employers and often carry real weight in hiring decisions. Training aligned to local labor market demand increases the likelihood that participants enter sectors with genuine opportunity for advancement and wage growth. At the Platinum level, the focus on living-wage occupations reflects a core program value: the goal isn't just employment, it's economic mobility. Organizations that use labor market data and employer input to shape what they train for tend to achieve higher placement rates and stronger wage outcomes — and they build employer trust, because what they're producing matches what the market actually needs.")}
+${row("Definition:","Training and certifications leading to industry-recognized credentials, aimed at jobs employers are hiring for now and at industries that pay well.")}
+${spectrum("No occupational training offered or referred.","A few training options exist, chosen by habit or convenience rather than by what employers are hiring for.","Training options are being reviewed against local demand. Some lead to recognized credentials; wage outcomes are not yet part of the decision.","Occupational skills training offered, directly or through partners, aligned with local labor market demand and leading to industry-recognized credentials.","Training is shaped by employer input and specific labor market data, targets higher-wage industries, and occupations must pay a livable wage for the geographic area.")}  
+${row("Optional:","Delivery method, training type, and credential; aligned with local demand. Provided directly or through partners.")}
+</div>`},
+    17:{title:"17. Career Exploration Opportunities",html:`<div class="popup-scroll">
+${why("Hands-on exposure to a career before committing to a training program is a well-established strategy for increasing both training completion rates and long-term career satisfaction. Job shadows, site tours, internships, and OJT placements give participants a realistic picture of what a career involves — which both strengthens motivation for those who are a good fit and helps redirect those who aren't before they've invested months in a program. Organizations that offer structured exploration opportunities also tend to build stronger employer relationships, since exploration requires direct employer collaboration.")}
+${row("Definition:","Hands-on experiences such as job shadowing, OJT, learn-and-earn, internships, pre-apprenticeships, apprenticeships, job site tours, informational employment observations, and simulated environments using VR headsets. These let participants see a career up close before committing to training, with paid experiences prioritized when someone is ready.")}
+${spectrum("No exploration offered.","An occasional site tour or guest speaker happens, but exploration is not planned, tracked, or offered to everyone.","A few exploration activities are offered regularly, such as job shadowing or tours, though not yet sequenced before training decisions.","Career exploration activities offered so participants can see a field before committing, using job shadowing, tours, simulations, OJT, or internships.","A full range of work-based learning, with paid internships and apprenticeships prioritized for ready participants, sequenced ahead of training and built with employer partners.")}  
+${row("Optional:","Type of experience and delivery method; aligned with in-demand occupations. Provided directly or through partners.")}
+</div>`},
+    18:{title:"18. Job Search / Prep Assistance",html:`<div class="popup-scroll">
+${why("The modern hiring process has changed substantially, and preparation makes a real difference in outcomes. Resume writing tailored to applicant, practiced interview skills, and strategies for addressing complex employment histories are competencies that don't develop passively — they require guided practice. Participants who receive structured job search preparation tend to move through the hiring process more efficiently and with more confidence. This criterion ensures that the investment in training isn't the last mile — that participants have the tools to convert readiness into employment.")}
+${row("Definition:","Structured support with resumes, cover letters, interviews, and online job applications.")}
+${spectrum("No job search help.","Informal tips on resumes or interviews, given by whichever staff person is available. No curriculum or consistency.","A job search offering exists and reaches many participants, though content and delivery still vary by staff.","Structured job search preparation for every participant, including resume and interview prep, delivered directly or through partners.","Full preparation including resumes, cover letters, interview practice, online application navigation, and strategies for complex work histories, refined with employer feedback.")}  
+${row("Optional:","Delivery method (in-person, virtual), curriculum, and training type. Provided directly or through partners.")}
+</div>`},
+    19:{title:"19. Job Placement Assistance",html:`<div class="popup-scroll">
+${why("Active placement support — where the organization is engaged on both sides of the match — tends to produce better wage outcomes and faster time-to-hire than job search preparation alone. Employer relationships built through Organizational Prep and deepened through training design mean that placements happen within networks of mutual trust, not cold applications. The Platinum emphasis on living-wage employment reflects a commitment to economic mobility as the actual measure of success.")}
+${row("Definition:","Engage employers to identify job openings and create employment opportunities. Placement is active, employer relationships are maintained beyond a single hire, and pay is measured against a living wage benchmark.")}
+${spectrum("No placement support.","Staff share job leads when they hear about them, but no one owns placement and there is no employer follow-up.","Placement support is becoming consistent and some employer relationships are being maintained, though wage quality is not yet tracked.","Job placement assistance offered to every participant, with staff engaging employers to identify openings and make matches.","Active job development with trusted, ongoing employer relationships, and placements benchmarked to a livable wage using the MIT Living Wage Calculator.")}  
+${row("Optional:","Employer types aligned with local labor market.")}
+</div>`},
+    20:{title:"20. Retention Services and Follow-Up",html:`<div class="popup-scroll">
+${why("The research on job retention is clear: the period immediately following placement is when support has the highest impact. Early check-ins allow organizations to identify and address emerging challenges while they're still manageable — a scheduling issue, an interpersonal conflict, a benefits question — before they escalate. Organizations that invest in structured retention support typically see meaningfully higher 90-day and 180-day retention rates. Extending follow-up to 365 days at Platinum also generates longitudinal data that helps the organization understand what's actually driving long-term stability — insights that feed directly back into improving services.")}
+${row("Definition:","Ongoing support after job placement or training completion to help individuals retain employment and advance in their careers. Contact is most frequent in the first 90 days and is paired with real supports and goal-based coaching, not check-ins alone.")}
+${spectrum("Services end at placement.","Occasional check-ins happen when staff have time, with no schedule, no documentation, and no support behind the call.","A follow-up schedule is in place and most participants are contacted, though contacts are status checks rather than coaching.","Structured follow-up at 30, 60, 90, and 180 days, with contacts connected to wraparound supports and the participant&#39;s goals.","Follow-up extended to 365 days, front-loaded in the first 90 days, paired with goal-based employment coaching and advancement support rather than check-ins alone.")}  
+${row("Optional:","Additional follow-up periods; verification tools such as employer confirmation, paystub submission, The Work Number, etc. Financial incentives to retain employment.")}
+</div>`},
+    21:{title:"21. Alumni Engagement",html:`<div class="popup-scroll">
+${why("Alumni programs create value in multiple directions at once. For alumni themselves, continued connection supports career advancement and provides community with people who've shared similar experiences. For current participants, alumni mentors offer something that professional staff often can't: credible, lived evidence that the program works and that the path forward is real. For the organization, alumni networks are a source of employer referrals, programmatic feedback, and advocacy that money can't easily buy. At its best, alumni engagement transforms a service relationship into a genuine community — one where people give back because the program gave them something worth passing on.")}
+${row("Definition:","Long-term engagement of individuals after program completion or job placement, extending beyond one year, through networking, mentorship, and/or alumni serving as teachers or teaching assistants. These connections help people hear about and land jobs, and pair alumni with current participants as peer mentors.")}
+${spectrum("No contact after exit.","Leaders see the value of staying connected, but there is no method, owner, or plan for alumni engagement.","An alumni list is being built and occasional outreach happens, though engagement is not yet structured or ongoing.","At least one established method of alumni engagement beyond one year, such as networking, mentorship, or alumni serving as teachers or teaching assistants. (Encouraged, not required.)","A sustained alumni network that builds connections across social lines, opens job leads, and pairs alumni with current participants as peer mentors.")}  
+${row("Optional:","Format and frequency of engagement.")}
+</div>`}
+};
+
+const modal=document.getElementById('modal');
+const mTitle=document.getElementById('modal-title');
+const mDesc=document.getElementById('modal-description');
+const closeBtn=document.querySelector('.close');
+
+document.querySelectorAll('.service-box').forEach(box=>{
+    box.addEventListener('click',function(){
+        const d=defs[this.dataset.id];
+        if(!d) return;
+        mTitle.innerHTML=d.title;
+        mDesc.innerHTML=d.html;
+        modal.style.display='block';
+    });
+});
+
+closeBtn.addEventListener('click',()=>modal.style.display='none');
+window.addEventListener('click',e=>{if(e.target===modal)modal.style.display='none';});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.style.display==='block')modal.style.display='none';});
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
